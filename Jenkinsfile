@@ -6,17 +6,16 @@ pipeline {
     }
 
     stages {
-        stage('Setup Go Module') {
-            steps {
-                sh """
-                    if [ ! -f go.mod ]; then
-                        go mod init github.com/esauflores/DevOpsCourse
-                    fi
-                    go mod tidy
-                """
-            }
-        }
-
+        // stage('Setup Go Module') {
+        //     steps {
+        //         sh """
+        //             if [ ! -f go.mod ]; then
+        //                 go mod init github.com/esauflores/DevOpsCourse
+        //             fi
+        //             go mod tidy
+        //         """
+        //     }
+        // }
      
         stage('Test') {
             steps {
