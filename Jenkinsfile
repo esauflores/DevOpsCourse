@@ -21,7 +21,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 sshagent(['target-ssh-credentials']) {
-                    sh 'ssh-keyscan -H target >> ~/.ssh/known_hosts'
                     sh 'scp main laborant@target:~'
                 }
             }
