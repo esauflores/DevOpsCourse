@@ -18,20 +18,11 @@ pipeline {
             }
         }
 
-        stage('Prepare SSH') {
-            steps {
-                sh '''
-                  mkdir -p ~/.ssh
-                  chmod 700 ~/.ssh
-                  ssh-keyscan -H target >> ~/.ssh/known_hosts
-                  chmod 600 ~/.ssh/known_hosts
-                '''
-            }
-        }
-
         stage('Deploy') {
             steps {
-                sh 'scp main laborant@target:~'
+                 sh 'mkdir -p ~/.ssh'
+                 sh 'ssh-keyscan -H target >> ~/.ssh/known_hosts'
+                 sh 'scp main laborant@target:~'
             }
         }
 
