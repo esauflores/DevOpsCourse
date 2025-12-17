@@ -1,22 +1,24 @@
 - hosts: all
+  become: true
+  vars:
+    container_name: devops-go-app
+
   tasks:
-    - name: Copy the artifact
-      copy:
-        src: main
-        dest: /home/laborant/main
-        mode: '0755'
+    - name: Pull Docker image
+      community.docker.docker_image:
+        name: "{{ image_name }}"
+        source: pull
 
-    - name: Create a unit file
-      become: True
-      copy:
-        src: main.service
-        dest: 
-          /etc/systemd/system/main.service
-        mode: '0644'
+    - name: Remove existing container
+      community.docker.docker_container:
+        name: "{{ container_name }}"
+        state: absent
 
-    - name: Start the service
-      become: True
-      ansible.builtin.systemd:
-        name: main.service
-        daemon_reload: true
+    - name: Run container
+      community.docker.docker_container:
+        name: "{{ container_name }}"
+        image: "{{ image_name }}"
         state: started
+        restart_policy: unless-stopped
+        published_ports:
+          - "4444:4444"
