@@ -8,6 +8,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "ttl.sh/esauflores-devops-go-app:2h"
+        KUBERNETES_SERVER_URL = "https://kubernetes:6443"
     }
 
     stages {
@@ -36,14 +37,14 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sshagent(['target-ssh-credentials']) {
-                    sh '''
-                    mkdir -p ~/.ssh
-                    ssh-keyscan -H docker >> ~/.ssh/known_hosts
-                    ansible-playbook --inventory hosts.ini playbook.yml --extra-vars "image_name=${IMAGE_NAME}"
-                    '''
+                withKubeConfig(
+                    credentialsId: 'k8s-jenkins-token',
+                    serverUrl: KUBERNETES_SERVER_URL,
+                    insecureSkipTlsVerify: true
+                ) {
+                    sh "kubectl apply -f definition.yaml"
                 }
             }
-        }
+        } 
     }
 }
