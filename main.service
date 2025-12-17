@@ -1,0 +1,16 @@
+[Unit]
+Description=DevOps Go App
+After=network.target
+
+[Service]
+Type=simple
+User=laborant
+Group=laborant
+WorkingDirectory=/home/laborant
+ExecStart=/home/laborant/main
+Restart=always
+RestartSec=5
+Environment=HOME=/home/laborant
+
+[Install]
+WantedBy=multi-user.target
