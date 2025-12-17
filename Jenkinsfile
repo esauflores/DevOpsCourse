@@ -40,7 +40,6 @@ pipeline {
                 withKubeConfig(
                     credentialsId: 'k8s-jenkins-token',
                     serverUrl: KUBERNETES_SERVER_URL,
-                    insecureSkipTlsVerify: true
                 ) {
                     sh "kubectl apply -f definition.yaml"
                 }
