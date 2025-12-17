@@ -1,24 +1,20 @@
-- hosts: all
+- hosts: target
   become: true
   vars:
     container_name: devops-go-app
 
   tasks:
     - name: Pull Docker image
-      community.docker.docker_image:
-        name: "{{ image_name }}"
-        source: pull
+      command: docker pull {{ image_name }}
 
-    - name: Remove existing container
-      community.docker.docker_container:
-        name: "{{ container_name }}"
-        state: absent
+    - name: Stop & remove existing container (if any)
+      command: docker rm -f {{ container_name }}
+      ignore_errors: true
 
     - name: Run container
-      community.docker.docker_container:
-        name: "{{ container_name }}"
-        image: "{{ image_name }}"
-        state: started
-        restart_policy: unless-stopped
-        published_ports:
-          - "4444:4444"
+      command: >
+        docker run -d
+        --name {{ container_name }}
+        --restart unless-stopped
+        -p 4444:4444
+        {{ image_name }}
