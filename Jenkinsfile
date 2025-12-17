@@ -21,9 +21,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sshagent(['target-ssh-credentials']) {
-                    sh 'mkdir -p ~/.ssh'
-                    sh 'ssh-keyscan -H target >> ~/.ssh/known_hosts'
-                    sh 'scp main laborant@target:~'
+                    sh 'ansible-playbook --inventory hosts.ini playbook.yml'
                 }
             }
         }
