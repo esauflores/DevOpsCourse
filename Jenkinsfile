@@ -39,7 +39,7 @@ pipeline {
                 sshagent(['target-ssh-credentials']) {
                     sh '''
                     mkdir -p ~/.ssh
-                    ssh-keyscan -H docker >> ~/.ssh/known_hosts
+                    ssh-keyscan -H ec2-54-206-70-249.ap-southeast-2.compute.amazonaws.com >> ~/.ssh/known_hosts
                     ansible-playbook --inventory hosts.ini playbook.yml --extra-vars "image_name=${IMAGE_NAME}"
                     '''
                 }

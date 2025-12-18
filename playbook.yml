@@ -1,4 +1,4 @@
-- hosts: target
+- hosts: production
   become: true
   vars:
     container_name: devops-go-app
